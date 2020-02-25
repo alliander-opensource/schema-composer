@@ -6,10 +6,11 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="/js/fabric/Fabric.js"></script>
     <script type="text/javascript" src="/js/fabric/FabricOwl.js"></script>
-    <script type="text/javascript" src="/js/generators/Generators.js"></script>
     <script type="text/javascript" src="/js/SchemaComposerModel.js"></script>
     <script type="text/javascript" src="/js/SchemaComposerView.js"></script>
     <script type="text/javascript" src="/js/SchemaComposerController.js"></script>
+    <script type="text/javascript" src="/js/generators/Generators.js"></script>
+    <script type="text/javascript" src="/js/generators/Exports.js"></script>
     <script type="text/javascript" src="/js/loaders/OntologyLoader.js"></script>
     <script type="text/javascript" src="/js/loaders/EnterpriseArchitectLoader.js"></script>
     <!-- temporary solution until EA API supports connector resources TODO check compositions -->
@@ -20,8 +21,9 @@
     <h1>ALLIANDER ESM</h1>
     <h2>Schema Composer</h2>
     <ul id="Menu">
+        <li>Laad Diagram</li>
         <li>Opslaan</li>
-        <li>Exporteren</li>
+        <li onclick="exportToSVG()">Exporteer SVG</li>
         <li>Handleiding</li>
         <li>Over</li>
         <li>Uitloggen</li>
