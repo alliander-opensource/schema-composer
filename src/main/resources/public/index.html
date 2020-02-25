@@ -11,6 +11,7 @@
     <script type="text/javascript" src="/js/SchemaComposerController.js"></script>
     <script type="text/javascript" src="/js/generators/Generators.js"></script>
     <script type="text/javascript" src="/js/generators/Exports.js"></script>
+    <script type="text/javascript" src="/js/loaders/DiagramLoader.js"></script>
     <script type="text/javascript" src="/js/loaders/OntologyLoader.js"></script>
     <script type="text/javascript" src="/js/loaders/EnterpriseArchitectLoader.js"></script>
     <!-- temporary solution until EA API supports connector resources TODO check compositions -->
@@ -21,8 +22,8 @@
     <h1>ALLIANDER ESM</h1>
     <h2>Schema Composer</h2>
     <ul id="Menu">
-        <li>Laad Diagram</li>
-        <li>Opslaan</li>
+        <li onclick="openFilePicker()">Diagram Laden<input id="FileInput" type="file" name="name" style="display: none;" /></li>
+        <li onclick="exportDiagram()">Diagram Opslaan</li>
         <li onclick="exportToSVG()">Exporteer SVG</li>
         <li>Handleiding</li>
         <li>Over</li>
