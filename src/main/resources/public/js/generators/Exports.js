@@ -13,7 +13,11 @@ function exportDiagram() {
         var id = schemaDefinedClasses[x];
         var obj = selectObject(id);
         positions[id] = { "left": obj.left, "top": obj.top};
-         }
+    }
+    for (var key in schemaDefinedEnums) {
+        var obj = selectObject(key);
+        positions[key] = { "left": obj.left, "top": obj.top};
+    }
     var diagram = {
         "axioms" : {
             "classes" : schemaDefinedClasses,

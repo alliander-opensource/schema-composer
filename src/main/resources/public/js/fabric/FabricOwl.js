@@ -1,12 +1,23 @@
 // https://stackoverflow.com/questions/42095045/fabric-js-itext-font-fuzzy-according-to-position
 fabric.Object.prototype.objectCaching = false;
 
+var fontName = "Titillium Web";
+
 function getFabricOwlClass(classData) {
+    var classType = "Class";
+    var classFill = "#fffcc9";
+
+    if (classData["type"] != null) {
+        classType = classData["type"];
+        if (classType === "Enum")
+            classFill = "#c2ffa3";
+    }
+
     // set class name
     var name = new fabric.Text(classData["name"], {
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: 'bold',
-        fontFamily: 'Arial'
+        fontFamily: fontName
     });
 
     var attText = "";
@@ -22,12 +33,12 @@ function getFabricOwlClass(classData) {
     var attributes = new fabric.Text(attText, {
         top: 30,
         fontSize: 12,
-        fontFamily: 'Arial',
+        fontFamily: fontName,
         lineHeight : 1.5
     });
 
-    // group together as class object
-    var owlClass = new fabric.Group([name, attributes], { id : classData["IRI"]});
+    // group together as class object - introduce type [class, enum]
+    var owlClass = new fabric.Group([name, attributes], { id : classData["IRI"], elementType : classType });
 
     // TODO Refactor the padding out of the group
     var padding = 12;
@@ -42,7 +53,7 @@ function getFabricOwlClass(classData) {
         height: owlClass.height+padding,
         stroke: '#696969',
         strokeWidth: 1,
-        fill: 'white',
+        fill: classFill,
     });
     var header = new fabric.Line([-0.5*owlClass.width-(padding/2), -0.5*owlClass.height-(padding/2)+30, 0.5*owlClass.width+(padding/2), -0.5*owlClass.height-(padding/2)+30], {
         fill: '#696969',
@@ -81,7 +92,7 @@ function getAssociation(startObj, endObj, label, assocID) {
 
     var assoc = new fabric.Text(labelText, {
         fontSize: 11,
-        fontFamily: 'Arial',
+        fontFamily: fontName,
         lineHeight : 1.5,
         originX: 'left',
         originY: 'top'
@@ -92,8 +103,8 @@ function getAssociation(startObj, endObj, label, assocID) {
         fill: fillColor,
         stroke: '#696969',
         strokeWidth: 1,
-        height: 11,
-        width: 11,
+        height: 12,
+        width: 12,
         originX: 'center'
     });
 

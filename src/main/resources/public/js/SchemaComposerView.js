@@ -11,6 +11,16 @@ function addClassToCanvas(name, attributes, iri) {
     canvas.add(getFabricOwlClass(classToAdd));
 }
 
+function addEnumToCanvas(name, attributes, iri) {
+    var classToAdd = {
+        "name": name,
+        "type": "Enum",
+        "attributes": attributes,
+        "IRI": iri
+    }
+    canvas.add(getFabricOwlClass(classToAdd));
+}
+
 function addAttributeToCanvas(attribute) {
     // empty the group object and redraw the group elements
     var group = canvas.getActiveObject();

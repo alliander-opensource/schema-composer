@@ -1,8 +1,13 @@
 body {
     margin: 0 auto;
     text-align: center;
-    font-family: 'Arial';
-    background-color: #f5f4f2;
+    font-family: "Titillium Web";
+    background-color: #fcfcfc;
+}
+
+#Logo {
+    margin-top: 5px;
+    font-size: 24px;
 }
 
 #LoadOntologyResponse {
@@ -15,7 +20,8 @@ body {
 }
 
 #Canvas {
-
+    background-size: 20px 20px;
+    background-image: radial-gradient(circle, #e8e8e8 1px, rgba(0, 0, 0, 0) 1px);
 }
 
 #CanvasContainer {
@@ -190,7 +196,7 @@ input[type="text"], input[type="password"] {
     border-radius: 3px;
     border: 1px solid lightgrey;
     width: 245px;
-    font-family: 'Arial';
+    font-family: "Titillium Web";
 }
 
 #IRI, #uid, #password {
@@ -216,7 +222,7 @@ input[type="submit"] {
     border: none;
     background-color: #e56c00;
     color: white;
-    font-family: 'Arial';
+    font-family: "Titillium Web";
 }
 
 #Right {

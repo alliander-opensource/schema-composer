@@ -8,6 +8,7 @@ function loadDiagram() {
         var dataProperties = data["axioms"]["dataProperties"];
         var objectProperties = data["axioms"]["objectProperties"];
         var inheritance = data["axioms"]["inheritance"];
+        var enums = data["axioms"]["enums"];
         // load classes
         for (var x = 0; x < data["axioms"]["classes"].length; x++) {
             var className = data["axioms"]["classes"][x];
@@ -43,6 +44,22 @@ function loadDiagram() {
             document.getElementById("SuperClass").value = inherit["superClass"];
             addInheritance();
         }
+        // process enums
+        for (var key in enums) {
+            var enumeration = enums[key];
+            addEnumToCanvas(key, [], key);
+            setActiveCanvasObject(key);
+            for (var index in enumeration) {
+                addAttributeToCanvas(enumeration[index]);
+            }
+            schemaDefinedEnums[key] = enumeration;
+            var pos = data["positions"][key];
+            var obj = canvas.getActiveObject();
+            obj.left = pos["left"];
+            obj.top = pos["top"];
+            obj.setCoords();
+        }
+        canvas.renderAll();
     }
     reader.readAsText(file);
 }

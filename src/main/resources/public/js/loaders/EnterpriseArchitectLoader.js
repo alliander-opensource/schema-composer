@@ -39,20 +39,30 @@ function loadEADiagram() {
             canvas.setHeight(2500);
             canvas.setWidth(2500);
 
+            // TODO refactor difference enums and classes
             for (var x = 0; x < obj.length; x++) {
                 // distinguish between classes and enumerations
                 var metadata = unpackJSON(obj[x], ["metadata", "rdf:RDF", "oslc_am:Resource"]);
                 // enums sometimes only the stereotype is set
                 if (metadata["dcterms:type"] === "Enumeration" || unpackJSON(metadata, ["ss:stereotype", "ss:stereotypename", "ss:name"]) === "enumeration") {
+                    addEnumToCanvas(metadata["dcterms:title"], [], metadata["dcterms:title"]);
+                    var coords = obj[x]["coords"].split(",");
+                    setActiveCanvasObject(metadata["dcterms:title"]);
+                    var activeObj = canvas.getActiveObject();
+                    activeObj.left = parseInt(coords[0]);
+                    activeObj.top = parseInt(coords[1]);
+                    activeObj.setCoords();
                     var enumItems = [];
                     // iterating over the attributes of the enum
                     var attributes = unpackJSON(obj[x], ["attributes", "rdf:RDF", "ss:features", "ss:attributes", "rdf:Description", "rdfs:member"]);
                     if (attributes) {
                         if (attributes.length === undefined) {
                             enumItems.push(attributes["ss:attribute"]["dcterms:title"]);
+                            addAttributeToCanvas(attributes["ss:attribute"]["dcterms:title"]);
                         }
                         for (var d = 0; d < attributes.length; d++) {
                             enumItems.push(attributes[d]["ss:attribute"]["dcterms:title"]);
+                            addAttributeToCanvas(attributes[d]["ss:attribute"]["dcterms:title"]);
                         }
                     }
                     schemaDefinedEnums[metadata["dcterms:title"]] = enumItems;
