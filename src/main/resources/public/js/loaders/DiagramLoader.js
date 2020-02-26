@@ -16,16 +16,16 @@ function loadDiagram() {
                 addClassToCanvas(className, [], className);
                 setActiveCanvasObject(className);
                 var pos = data["positions"][className];
-                var obj = canvas.getActiveObject();
-                obj.left = pos["left"];
-                obj.top = pos["top"];
-                obj.setCoords();
                 // data properties
                 var releventDataProperties = dataProperties.filter(e => e['domain'] == canvas.getActiveObject().id);
                 for (var y = 0; y < releventDataProperties.length; y++) {
                     addAttributeInternal(className, releventDataProperties[y]["range"], releventDataProperties[y]["property"], releventDataProperties[y]["minCardinality"], releventDataProperties[y]["maxCardinality"]);
                     addAttributeToCanvas(releventDataProperties[y]["property"] + " : " + releventDataProperties[y]["range"] + " [" + releventDataProperties[y]["minCardinality"] + ".." + releventDataProperties[y]["maxCardinality"] + "]");
                 }
+                var obj = canvas.getActiveObject();
+                obj.left = pos["left"];
+                obj.top = pos["top"];
+                obj.setCoords();
             }
         }
         // process associations and inheritance

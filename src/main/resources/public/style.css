@@ -192,7 +192,7 @@ h3 {
 }
 
 input[type="text"], input[type="password"] {
-    padding: 7px;
+    padding: 5px;
     border-radius: 3px;
     border: 1px solid lightgrey;
     width: 245px;

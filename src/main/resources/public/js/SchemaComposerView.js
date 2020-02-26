@@ -28,7 +28,7 @@ function addAttributeToCanvas(attribute) {
         group.item(2).text += "\n";
     }
     var tempWidth = group.width;
-    group.item(2).text += attribute;
+    group.item(2).text += "+" + attribute;
     group.dirty = true;
     canvas.renderAll();
 
@@ -104,7 +104,7 @@ function resetAttributesOnCanvas() {
             if (x != 0)
                 attText += "\n";
             var split = attributes[x]["property"].split("#");
-            attText += split[split.length-1].split(">")[0] + " : " + attributes[x]['range'] + " [" + attributes[x]['minCardinality'] + ".." + attributes[x]['maxCardinality'] + "]";
+            attText += "+" + split[split.length-1].split(">")[0] + " : " + attributes[x]['range'] + " [" + attributes[x]['minCardinality'] + ".." + attributes[x]['maxCardinality'] + "]";
        }
 
        var tempWidth = group.width;
@@ -185,7 +185,7 @@ function updateAssociations() {
     var left = 0;
     var grouped = [];
 
-    if (active.id === undefined) {
+    if (active != undefined && active.id === undefined) {
         top = active.top + (active.height / 2);
         left = active.left + (active.width / 2);
         var objects = active.getObjects();
@@ -210,26 +210,61 @@ function setActiveCanvasObject(IRI) {
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-     // drawing the editor
-     // https://www.html5rocks.com/en/tutorials/canvas/hidpi/
-     canvas = new fabric.Canvas('Canvas');
-     var container = document.getElementById("Right");
-     classEditor = document.getElementById("ClassEditor");
-     canvas.setHeight(container.offsetHeight);
-     canvas.setWidth(container.offsetWidth);
+    // drawing the editor
+    // https://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    canvas = new fabric.Canvas('Canvas', {fireRightClick: true});
+    var container = document.getElementById("Right");
+    classEditor = document.getElementById("ClassEditor");
+    canvas.setHeight(container.offsetHeight);
+    canvas.setWidth(container.offsetWidth);
 
-     canvas.on('selection:created', function() {
-         showClassEditor();
-     });
-     canvas.on('selection:updated', function() {
-         showClassEditor();
-     });
-     canvas.on('selection:cleared', function() {
-         classEditor.style.right = "-350px";
-     });
+    canvas.on('selection:created', function() {
+        showClassEditor();
+    });
+    canvas.on('selection:updated', function() {
+        showClassEditor();
+    });
+    canvas.on('selection:cleared', function() {
+        classEditor.style.right = "-350px";
+    });
 
-     canvas.on('object:moving', function(e) {
-         updateAssociations();
-         canvas.renderAll();
-     });
+    canvas.on('mouse:down', function(opt) {
+        var evt = opt.e;
+        if (opt.button === 3) {
+            this.isDragging = true;
+            this.selection = false;
+            this.lastPosX = evt.clientX;
+            this.lastPosY = evt.clientY;
+        }
+    });
+    canvas.on('mouse:move', function(opt) {
+        if (this.isDragging) {
+            var e = opt.e;
+            //this.viewportTransform[4] += e.clientX - this.lastPosX;
+            //this.viewportTransform[5] += e.clientY - this.lastPosY;
+            var objects = this.getObjects();
+            for(var x = 0; x < objects.length; x++) {
+                if (objects[x].elementType != undefined) {
+                    objects[x].top += e.clientY - this.lastPosY;
+                    objects[x].left += e.clientX - this.lastPosX;
+                    objects[x].setCoords();
+                }
+            }
+            updateAssociations();
+            this.requestRenderAll();
+            this.lastPosX = e.clientX;
+            this.lastPosY = e.clientY;
+        }
+    });
+    canvas.on('mouse:up', function(opt) {
+        this.isDragging = false;
+        this.selection = true;
+    });
+
+    canvas.on('object:moving', function(e) {
+        updateAssociations();
+        canvas.renderAll();
+    });
+
+    document.addEventListener('contextmenu', event => event.preventDefault());
  }, false);

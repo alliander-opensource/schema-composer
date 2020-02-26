@@ -36,9 +36,6 @@ function loadEADiagram() {
         if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(this.responseText);
             // parsing the reponse
-            canvas.setHeight(2500);
-            canvas.setWidth(2500);
-
             // TODO refactor difference enums and classes
             for (var x = 0; x < obj.length; x++) {
                 // distinguish between classes and enumerations
@@ -48,10 +45,6 @@ function loadEADiagram() {
                     addEnumToCanvas(metadata["dcterms:title"], [], metadata["dcterms:title"]);
                     var coords = obj[x]["coords"].split(",");
                     setActiveCanvasObject(metadata["dcterms:title"]);
-                    var activeObj = canvas.getActiveObject();
-                    activeObj.left = parseInt(coords[0]);
-                    activeObj.top = parseInt(coords[1]);
-                    activeObj.setCoords();
                     var enumItems = [];
                     // iterating over the attributes of the enum
                     var attributes = unpackJSON(obj[x], ["attributes", "rdf:RDF", "ss:features", "ss:attributes", "rdf:Description", "rdfs:member"]);
@@ -66,6 +59,10 @@ function loadEADiagram() {
                         }
                     }
                     schemaDefinedEnums[metadata["dcterms:title"]] = enumItems;
+                    var activeObj = canvas.getActiveObject();
+                    activeObj.left = parseInt(coords[0]);
+                    activeObj.top = parseInt(coords[1]);
+                    activeObj.setCoords();
                 } else if (metadata["dcterms:type"] === "Class") {
                     // process classes
                     var name = metadata["dcterms:title"];
@@ -76,10 +73,6 @@ function loadEADiagram() {
                         addClassToCanvas(name, [], name);
                         // set active class
                         setActiveCanvasObject(name);
-                        var activeObj = canvas.getActiveObject();
-                        activeObj.left = parseInt(coords[0]);
-                        activeObj.top = parseInt(coords[1]);
-                        activeObj.setCoords();
                         // process the attributes of the class
                         var attributes = unpackJSON(obj[x], ["attributes", "rdf:RDF", "ss:features", "ss:attributes", "rdf:Description", "rdfs:member"]);
                         nameMapping[obj[x]["guid"]] = name;
@@ -97,6 +90,10 @@ function loadEADiagram() {
                                 addAttributeToCanvas(attribute["dcterms:title"] + " : " + attribute["ss:classifiername"] + " [" + attribute["ss:lowerbound"] + ".." + attribute["ss:upperbound"] + "]");
                             }
                         }
+                        var activeObj = canvas.getActiveObject();
+                        activeObj.left = parseInt(coords[0]);
+                        activeObj.top = parseInt(coords[1]);
+                        activeObj.setCoords();
                     }
                 }
             }

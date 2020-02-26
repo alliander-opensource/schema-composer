@@ -3,6 +3,8 @@ fabric.Object.prototype.objectCaching = false;
 
 var fontName = "Titillium Web";
 
+// TODO fix bug where height of classes is not updated properly when not rendered in canvas
+
 function getFabricOwlClass(classData) {
     var classType = "Class";
     var classFill = "#fffcc9";
@@ -31,7 +33,7 @@ function getFabricOwlClass(classData) {
     }
 
     var attributes = new fabric.Text(attText, {
-        top: 30,
+        top: 28,
         fontSize: 12,
         fontFamily: fontName,
         lineHeight : 1.5
@@ -55,7 +57,7 @@ function getFabricOwlClass(classData) {
         strokeWidth: 1,
         fill: classFill,
     });
-    var header = new fabric.Line([-0.5*owlClass.width-(padding/2), -0.5*owlClass.height-(padding/2)+30, 0.5*owlClass.width+(padding/2), -0.5*owlClass.height-(padding/2)+30], {
+    var header = new fabric.Line([-0.5*owlClass.width-(padding/2), -0.5*owlClass.height-(padding/2)+28, 0.5*owlClass.width+(padding/2), -0.5*owlClass.height-(padding/2)+28], {
         fill: '#696969',
         stroke: '#696969',
         strokeWidth: 1,
@@ -86,8 +88,7 @@ function getAssociation(startObj, endObj, label, assocID) {
     var line = new fabric.Line([1, 1, 0, 0], {
         fill: '#696969',
         stroke: '#696969',
-        strokeWidth: 1,
-        selectable: false,
+        strokeWidth: 1
     });
 
     var assoc = new fabric.Text(labelText, {
@@ -113,7 +114,6 @@ function getAssociation(startObj, endObj, label, assocID) {
         originX: "center",
         originY: "center"
     });
-
     association.selectable = false;
     return association;
 }
