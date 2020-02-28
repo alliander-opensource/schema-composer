@@ -8,7 +8,9 @@ var fontName = "Titillium Web";
 function getFabricOwlClass(classData) {
     var classType = "Class";
     var classFill = "#fffcc9";
-
+    //var classFill = "#ffffff";
+    var strokeColor = "#bfbfbf";
+    strokeColor = "#000000";
     if (classData["type"] != null) {
         classType = classData["type"];
         if (classType === "Enum")
@@ -53,16 +55,24 @@ function getFabricOwlClass(classData) {
         top: -0.5*owlClass.height-(padding/2),
         width: owlClass.width+padding,
         height: owlClass.height+padding,
-        stroke: '#696969',
+        stroke: strokeColor,
         strokeWidth: 1,
-        fill: classFill,
+        fill: classFill
     });
     var header = new fabric.Line([-0.5*owlClass.width-(padding/2), -0.5*owlClass.height-(padding/2)+28, 0.5*owlClass.width+(padding/2), -0.5*owlClass.height-(padding/2)+28], {
         fill: '#696969',
-        stroke: '#696969',
+        stroke: strokeColor,
         strokeWidth: 1,
         selectable: false,
      });
+
+    var shadow = {
+        color: 'rgb(0,0,0,0.17)',
+        blur: 18,
+        offsetX: 0,
+        offsetY: 0,
+    }
+    border.setShadow(shadow);
 
     owlClass.add(border);
     owlClass.add(header);
