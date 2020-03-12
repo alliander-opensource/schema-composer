@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>ESM Schema Composer</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/style/properties.css">
+    <link rel="stylesheet" type="text/css" href="/style/style.css">
     <script type="text/javascript" src="/js/fabric/Fabric.js"></script>
     <script type="text/javascript" src="/js/fabric/FabricOwl.js"></script>
     <script type="text/javascript" src="/js/SchemaComposerModel.js"></script>
@@ -20,26 +23,83 @@
 </head>
 <body>
 <div id="Header">
-    <h1 id="Logo">Schema Composer</h1>
-    <ul id="Menu">
-        <li onclick="openFilePicker()">Diagram Laden<input id="FileInput" type="file" name="name" style="display: none;" /></li>
-        <li onclick="exportDiagram()">Diagram Opslaan</li>
-        <li onclick="exportToSVG()">Exporteer SVG</li>
-    </ul>
+    <div id="Logo">
+        <i class="material-icons md-48" id="LogoIcon">bubble_chart</i><h1>SchemaComposer</h1>
+    </div>
+    <div id="ToolBar">
+        <div class="tool">
+            <i class="material-icons md-48">undo</i>
+            <div class="toolLabel">Undo</div>
+        </div>
+        <div class="tool">
+            <i class="material-icons md-48">redo</i>
+            <div class="toolLabel">Redo</div>
+        </div>
+        <div class="tool" id="ZoomIn">
+            <i class="material-icons md-48">zoom_in</i>
+            <div class="toolLabel">In</div>
+        </div>
+        <div class="tool" id="ZoomOut">
+            <i class="material-icons md-48">zoom_out</i>
+            <div class="toolLabel">Out</div>
+        </div>
+        <div class="tool" onclick="openFilePicker()">
+            <i class="material-icons md-48">open_in_browser</i>
+            <div class="toolLabel">Open</div>
+            <input id="FileInput" type="file" name="name" style="display: none;" />
+        </div>
+        <div class="tool" onclick="exportDiagram()">
+            <i class="material-icons md-48">save</i>
+            <div class="toolLabel">Save</div>
+        </div>
+        <div class="tool" onclick="exportToSVG()">
+            <i class="material-icons md-48">image</i>
+            <div class="toolLabel">SVG</div>
+        </div>
+    </div>
 </div>
 <div id="PopupOverlay" onclick="closePopup()">
 </div>
 <div id="Popup">
     <h1>Generated Schema</h1>
     <pre id="Schema">
-
     <pre/>
 </div>
 <div id="Container">
+    <div id="MenuBar">
+        <div class="menuItem">
+            <i class="material-icons md-48">dynamic_feed</i>
+            <div class="menuItemLabel">Diagram</div>
+        </div>
+        <div class="menuItem active">
+            <i class="material-icons md-48">storage</i>
+            <div class="menuItemLabel">Model</div>
+        </div>
+        <div class="menuItem">
+            <i class="material-icons md-48">library_books</i>
+            <div class="menuItemLabel">Knowledge base</div>
+        </div>
+        <div class="menuItem">
+            <i class="material-icons md-48">code</i>
+            <div class="menuItemLabel">Schema generation</div>
+        </div>
+        <div class="menuItem">
+            <i class="material-icons md-48">history</i>
+            <div class="menuItemLabel">History</div>
+        </div>
+        <div class="menuItem">
+            <i class="material-icons md-48">settings</i>
+            <div class="menuItemLabel">Settings</div>
+        </div>
+        <div class="menuItem">
+            <i class="material-icons md-48">info</i>
+            <div class="menuItemLabel">Info</div>
+        </div>
+    </div>
     <div id="Left">
         <h3>Laad een ontologie</h3>
         <label for="IRI">Ontology IRI</label>
-        <input type="text" value="" id="IRI" /><input type="submit" value="Laad" onclick="loadOntology()"/>
+        <input type="text" value="" id="IRI" /><input type="submit" value="Load" onclick="loadOntology()"/>
         <h3>Laad een diagram</h3>
         <label for="baseURI">BaseURI</label>
         <input type="text" id="baseURI"/>
@@ -51,11 +111,11 @@
         <label for="dgGuid">Diagram GUID</label>
         <input type="text" value="" id="dgGuid" />
         <label for="uid">User Identifier</label>
-        <input type="text" value="" id="uid" /><input type="submit" value="Laad" onclick="loadEADiagram()"/>
+        <input type="text" value="" id="uid" /><input type="submit" value="Load" onclick="loadEADiagram()"/>
         <h3>Voeg een class toe</h3>
         <div id="ClassListWrapper">
             <label for="ClassInput">Class IRI</label>
-            <input type="text" id="ClassInput"/><input type="submit" value="Toevoegen" onclick="addClass()"/>
+            <input type="text" id="ClassInput"/><input type="submit" value="Add" onclick="addClass()"/>
             <ul id="ClassList"></ul>
         </div>
         <h3>Genereer AVRO schema</h3>
@@ -66,18 +126,17 @@
         </div>
         <label for="Namespace">Namespace</label>
         <input type="text" value="" id="Namespace"/>
-        <input type="submit" value="Genereer" onclick="generateAvro()"/>
+        <input type="submit" value="Generate" onclick="generateAvro()"/>
         <h3>Genereer JSON schema</h3>
         <label for="RootClasses">RootClasses</label>
         <input type="text" id="RootClasses" />
         <label for="JSONNamespace">Namespace</label>
         <input type="text" value="" id="JSONNamespace" />
-        <input type="submit" value="Genereer" onclick="generateJSONSchema()" />
+        <input type="submit" value="Generate" onclick="generateJSONSchema()" />
     </div>
     <div id="Right">
         <canvas id="Canvas" width="100%" height="100%"></canvas>
     </div>
-    <div style="clear: both;"></div>
     <div id="Ontologies">
         <h3>
             Geladen ontologieën
@@ -85,7 +144,7 @@
         <ul id="LoadedOntologies"></ul>
     </div>
     <div id="ClassEditor">
-        <h1 id="ClassName"></h1>
+        <h2 id="ClassName"></h2>
         <h3>Voeg een dataProperty toe</h3>
         <div id="ClassAttributeWrapper" class="InputList">
             <label for="ClassAttribute">Property</label>
@@ -96,7 +155,7 @@
             <label for="ClassAttributeMin">Cardinality</label>
             <input type="text" value="1" id="ClassAttributeMin" class="cardinality" />
             <input type="text" value="1" id="ClassAttributeMax" class="cardinality" />
-            <input type="submit" value="Toevoegen" onclick="addAttribute()"/>
+            <input type="submit" value="Add" onclick="addAttribute()"/>
         </div>
         <h3>Voeg een objectProperty toe</h3>
         <div id="ClassRelationWrapper">
@@ -109,13 +168,13 @@
             <label for="ClassRelationMin">Cardinality</label>
             <input type="text" value="1" id="ClassRelationMin" class="cardinality" />
             <input type="text" value="1" id="ClassRelationMax" class="cardinality" />
-            <input type="submit" value="Toevoegen" onclick="addAssociation()"/>
+            <input type="submit" value="Add" onclick="addAssociation()"/>
         </div>
         <h3>Voeg inheritance toe</h3>
         <div id="InheritanceWrapper">
             <label for="SuperClass">SuperClass</label>
             <input type="text" value="" id="SuperClass" />
-            <input type="submit" value="Toevoegen" onclick="addInheritance()" />
+            <input type="submit" value="Add" onclick="addInheritance()" />
             <ul id="SuperClassList"></ul>
         </div>
         <div style="margin-top: 25px; font-size: 12px;" onclick="deleteClass()">Verwijder deze class</div>

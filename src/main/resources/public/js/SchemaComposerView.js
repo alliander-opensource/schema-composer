@@ -209,6 +209,14 @@ function setActiveCanvasObject(IRI) {
     }
 }
 
+function handleResize() {
+    var canvasContainer = document.getElementById("Right");
+    canvas.setWidth(canvasContainer.offsetWidth);
+    canvas.setHeight(canvasContainer.offsetHeight);
+}
+
+window.onresize = handleResize;
+
 document.addEventListener('DOMContentLoaded', function(){
     // drawing the editor
     // https://www.html5rocks.com/en/tutorials/canvas/hidpi/
@@ -226,6 +234,27 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     canvas.on('selection:cleared', function() {
         classEditor.style.right = "-350px";
+    });
+
+    var timeout;
+
+    canvas.on('mouse:wheel', function(opt) {
+        var delta = opt.e.deltaY;
+        var zoom = canvas.getZoom();
+        var dir = delta/2000 * -1;
+        zoom = zoom + dir;
+        if (zoom > 20) zoom = 20;
+        if (zoom < 0.01) zoom = 0.01;
+        canvas.setZoom(zoom);
+        opt.e.preventDefault();
+        opt.e.stopPropagation();
+        var zoomElement = document.getElementById("ZoomIn");
+        if (dir < 0) zoomElement = document.getElementById("ZoomOut");
+        zoomElement.classList.add("toolHover");
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+          zoomElement.classList.remove("toolHover");
+        }, 100);
     });
 
     canvas.on('mouse:down', function(opt) {

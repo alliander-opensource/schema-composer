@@ -1,7 +1,7 @@
 // https://stackoverflow.com/questions/42095045/fabric-js-itext-font-fuzzy-according-to-position
 fabric.Object.prototype.objectCaching = false;
 
-var fontName = "Titillium Web";
+var fontName = "Poppins";
 
 // TODO fix bug where height of classes is not updated properly when not rendered in canvas
 
@@ -10,7 +10,7 @@ function getFabricOwlClass(classData) {
     var classFill = "#fffcc9";
     //var classFill = "#ffffff";
     var strokeColor = "#bfbfbf";
-    strokeColor = "#000000";
+    strokeColor = "#969696";
     if (classData["type"] != null) {
         classType = classData["type"];
         if (classType === "Enum")
