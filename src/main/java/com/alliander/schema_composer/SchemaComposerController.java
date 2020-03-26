@@ -15,7 +15,7 @@ public class SchemaComposerController {
 
     public static Handler convertToAVro = ctx -> {
         AvroGenerator generator = new AvroGenerator(new JSONObject(ctx.body()));
-        ctx.result(generator.generate());
+        ctx.result(generator.generate(false));
     };
 
     public static Handler convertToJSONSchema = ctx -> {

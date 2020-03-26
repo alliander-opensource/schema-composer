@@ -8,9 +8,23 @@ var schemaDefinedObjectProperties = [];
 var schemaDefinedInheritance = [];
 // enums
 var schemaDefinedEnums = {};
+// annotation properties
+var schemaDefinedAnnotations = [];
 
 // mapping { guid : name }
 var nameMapping = {}
+
+function addAnnotationInternal(iri, annotation) {
+    if (annotation) {
+        var property = { "iri" : iri, "annotation" : annotation };
+        for (var x = 0; x < schemaDefinedAnnotations.length; x++) {
+            if (JSON.stringify(schemaDefinedAnnotations[x]) === JSON.stringify(property))
+                return false;
+        }
+        schemaDefinedAnnotations.push(property);
+        return true;
+    }
+}
 
 function addClassInternal(iri) {
     if (schemaDefinedClasses.indexOf(iri) == -1) {

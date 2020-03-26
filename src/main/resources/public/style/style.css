@@ -19,7 +19,7 @@ body {
 	display: flex;
 	align-items: flex-start;
 	height: 100%;
-	width: 360px;
+	width: 380px;
 	border-right: 1px solid var(--border-color);
 	align-items: center;
 }
@@ -40,11 +40,11 @@ body {
 	font-size: 48px;
 	color: var(--accent-color);
 	margin-left: 15px;
+	margin-right: 40px;
 }
 
 h1 {
 	font-size: 22px;
-	margin-left: 30px;
 }
 
 h2 {
@@ -126,10 +126,10 @@ i {
     position: absolute;
     right: -300px;
     top: 0;
-    width: 280px;
+    width: 300px;
     height: 100%;
     text-align: left;
-    padding: 10px;
+    padding: 20px;
     box-sizing: border-box;
     overflow: auto;
     transition: all 0.5s;
@@ -221,8 +221,12 @@ label {
     box-sizing: border-box;
     padding: 10px;
     font-size: 11px;
-    border: 1px solid black;
-    display: none;
+    border: 1px solid var(--border-color);
+}
+
+#Ontologies h3 {
+    padding: 0;
+    margin: 0;
 }
 
 #LoadedOntologies {
@@ -239,10 +243,10 @@ label {
 
 #Left {
     float: left;
-    width: 280px;
+    width: 300px;
     height: 100%;
     text-align: left;
-    padding: 10px;
+    padding: 20px;
     box-sizing: border-box;
     overflow: hidden;
     border-right: 1px solid var(--border-color);
@@ -300,7 +304,7 @@ input[type="submit"] {
 
 #Right {
     float: left;
-    width: calc(100% - 361px);
+    width: calc(100% - 381px);
     height: 100%;
     overflow: auto;
     box-sizing: border-box;

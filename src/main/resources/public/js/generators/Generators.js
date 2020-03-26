@@ -9,15 +9,16 @@ function generateAvro() {
             "dataProperties" : schemaDefinedDataProperties,
             "objectProperties" : schemaDefinedObjectProperties,
             "enums" : schemaDefinedEnums,
-            "inheritance" : schemaDefinedInheritance
+            "inheritance" : schemaDefinedInheritance,
+            "annotations" : schemaDefinedAnnotations
         }
     }
-    console.log(JSON.stringify(schema));
     xhttp.send(JSON.stringify(schema));
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById("Popup").style.display = "Block";
             document.getElementById("PopupOverlay").style.display = "Block";
+            console.log(this.responseText);
             var jsonResponse = JSON.parse(this.responseText);
             var pretty = JSON.stringify(jsonResponse, undefined, 2);
             pretty = pretty.replace(/</g, "&lt");

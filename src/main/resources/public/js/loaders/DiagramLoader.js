@@ -9,6 +9,8 @@ function loadDiagram() {
         var objectProperties = data["axioms"]["objectProperties"];
         var inheritance = data["axioms"]["inheritance"];
         var enums = data["axioms"]["enums"];
+        if (data["axioms"]["annotations"])
+            schemaDefinedAnnotations = data["axioms"]["annotations"];
         // load classes
         for (var x = 0; x < data["axioms"]["classes"].length; x++) {
             var className = data["axioms"]["classes"][x];

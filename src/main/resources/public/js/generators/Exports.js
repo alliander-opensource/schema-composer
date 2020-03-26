@@ -24,7 +24,8 @@ function exportDiagram() {
             "dataProperties" : schemaDefinedDataProperties,
             "objectProperties" : schemaDefinedObjectProperties,
             "enums" : schemaDefinedEnums,
-            "inheritance" : schemaDefinedInheritance
+            "inheritance" : schemaDefinedInheritance,
+            "annotations" : schemaDefinedAnnotations
         },
         "positions" : positions
     };

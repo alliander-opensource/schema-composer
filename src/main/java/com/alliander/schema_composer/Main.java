@@ -1,40 +1,46 @@
 package com.alliander.schema_composer;
 
 import com.alliander.schema_composer.generators.AvroGenerator;
+import org.apache.commons.cli.*;
 import io.javalin.Javalin;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Main {
     public static void main(String[] args) {
-
-        boolean startJavalin = true;
-        // add parameter to execute Generator from Jar without starting Javalin
+        Options options = new Options();
+        Option avsc = Option.builder("avsc")
+                .hasArg()
+                .argName("path/filename")
+                .desc("Generate an .avsc from a logical model")
+                .build();
+        Option avdl = Option.builder("avdl")
+                .hasArg()
+                .argName("path/filename")
+                .desc("Generate an .avdl from a logical model")
+                .build();
+        options.addOption(avsc);
+        options.addOption(avdl);
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
         try {
-            String command = args[0];
-            String filePath = args[1];
-            String content = "";
-            try {
-                content = new String ( Files.readAllBytes( Paths.get(filePath) ) );
-            } catch (IOException e) {
-                System.out.println("[main] Error while trying to read the file");
-            }
-
-            try {
-                AvroGenerator generator = new AvroGenerator(new JSONObject(content));
-                System.out.println(generator.generate());
-            } catch (Exception e) {
-                System.out.println("[main] Error while generating .avsc, please check your logical model");
-            }
-            startJavalin = false;
-        } catch (Exception e) {
-            System.out.println("[main] No flags or invalid flags set, starting Javalin SchemaComposer.");
-            System.out.println("[main] use -avro -pathToFile to convert to .avsc directly");
-        } finally {
-            if (startJavalin) {
+            CommandLine cmd = parser.parse( options, args);
+            if (cmd.hasOption("avsc")) {
+                try {
+                    AvroGenerator generator = new AvroGenerator(cmd.getOptionValue("avsc"));
+                    System.out.println(generator.generate(false));
+                } catch (IOException e) {
+                    System.out.println("Error while generating .avsc, please check if <"
+                            + cmd.getOptionValue("avsc") + "> refers to a valid logical model");
+                }
+            } else if (cmd.hasOption("avdl")) {
+                try {
+                    AvroGenerator generator = new AvroGenerator(cmd.getOptionValue("avdl"));
+                    System.out.println(generator.generate(true));
+                } catch (IOException e) {
+                    System.out.println("Error while generating .avdl, please check if <" + cmd.getOptionValue("avdl")
+                            + "> refers to a valid logical model");
+                }
+            } else {
                 Javalin app = Javalin.create(config -> {
                     config.addStaticFiles("/public");
                 }).start(7777);
@@ -46,6 +52,10 @@ public class Main {
                 app.post("/GetDiagram/:dg_guid/:uid", SchemaComposerController.getDiagram);
                 app.post("/GetUserIdentifier", SchemaComposerController.getUserIdentifier);
             }
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("SchemaGenerator", options);
+            System.exit(1);
         }
     }
 }

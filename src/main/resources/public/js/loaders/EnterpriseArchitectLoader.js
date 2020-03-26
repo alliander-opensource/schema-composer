@@ -40,6 +40,7 @@ function loadEADiagram() {
             for (var x = 0; x < obj.length; x++) {
                 // distinguish between classes and enumerations
                 var metadata = unpackJSON(obj[x], ["metadata", "rdf:RDF", "oslc_am:Resource"]);
+                addAnnotationInternal(metadata["dcterms:title"], metadata["dcterms:description"]);
                 // enums sometimes only the stereotype is set
                 if (metadata["dcterms:type"] === "Enumeration" || unpackJSON(metadata, ["ss:stereotype", "ss:stereotypename", "ss:name"]) === "enumeration") {
                     addEnumToCanvas(metadata["dcterms:title"], [], metadata["dcterms:title"]);
@@ -52,10 +53,12 @@ function loadEADiagram() {
                         if (attributes.length === undefined) {
                             enumItems.push(attributes["ss:attribute"]["dcterms:title"]);
                             addAttributeToCanvas(attributes["ss:attribute"]["dcterms:title"]);
+                            addAnnotationInternal(metadata["dcterms:title"] + "." + attributes["ss:attribute"]["dcterms:title"], attributes["ss:attribute"]["dcterms:description"]);
                         }
                         for (var d = 0; d < attributes.length; d++) {
                             enumItems.push(attributes[d]["ss:attribute"]["dcterms:title"]);
                             addAttributeToCanvas(attributes[d]["ss:attribute"]["dcterms:title"]);
+                            addAnnotationInternal(metadata["dcterms:title"] + "." + attributes[d]["ss:attribute"]["dcterms:title"], attributes[d]["ss:attribute"]["dcterms:description"]);
                         }
                     }
                     schemaDefinedEnums[metadata["dcterms:title"]] = enumItems;
@@ -83,11 +86,13 @@ function loadEADiagram() {
                                 addAttributeInternal(name, attribute["ss:classifiername"], attribute["dcterms:title"], attribute["ss:lowerbound"], attribute["ss:upperbound"]);
                                 // add visually
                                 addAttributeToCanvas(attribute["dcterms:title"] + " : " + attribute["ss:classifiername"] + " [" + attribute["ss:lowerbound"] + ".." + attribute["ss:upperbound"] + "]");
+                                addAnnotationInternal(metadata["dcterms:title"] + "." + attribute["dcterms:title"], attribute["dcterms:description"]);
                             }
                             for (var y = 0; y < attributes.length; y++) {
                                 var attribute = attributes[y]["ss:attribute"];
                                 addAttributeInternal(name, attribute["ss:classifiername"], attribute["dcterms:title"], attribute["ss:lowerbound"], attribute["ss:upperbound"]);
                                 addAttributeToCanvas(attribute["dcterms:title"] + " : " + attribute["ss:classifiername"] + " [" + attribute["ss:lowerbound"] + ".." + attribute["ss:upperbound"] + "]");
+                                addAnnotationInternal(metadata["dcterms:title"] + "." + attribute["dcterms:title"], attribute["dcterms:description"]);
                             }
                         }
                         var activeObj = canvas.getActiveObject();
@@ -172,17 +177,18 @@ function processAssoc(sourceName, domain, ltData) {
     if (destName) {
         // check if there is a source end
         if (ltData["sourceEnd"]) {
-            loadAssoc(destName, sourceName, ltData["sourceEnd"]["lowerBound"], ltData["sourceEnd"]["upperBound"], ltData["sourceEnd"]["roleName"]);
+            loadAssoc(destName, sourceName, ltData["sourceEnd"]["lowerBound"], ltData["sourceEnd"]["upperBound"], ltData["sourceEnd"]["roleName"], ltData["sourceEnd"]["comment"]);
         }
         // check if there is a dest end
         if (ltData["destEnd"]) {
-            loadAssoc(sourceName, destName, ltData["destEnd"]["lowerBound"], ltData["destEnd"]["upperBound"], ltData["destEnd"]["roleName"]);
+            loadAssoc(sourceName, destName, ltData["destEnd"]["lowerBound"], ltData["destEnd"]["upperBound"], ltData["destEnd"]["roleName"], ltData["destEnd"]["comment"]);
         }
     }
 }
 
-function loadAssoc(sourceName, destName, minCard, maxCard, roleName) {
+function loadAssoc(sourceName, destName, minCard, maxCard, roleName, annotation) {
     setActiveCanvasObject(sourceName);
+    addAnnotationInternal(sourceName + "." + roleName, annotation);
     document.getElementById("ClassRelationRange").value = destName;
     document.getElementById("ClassRelation").value = roleName;
     document.getElementById("ClassRelationMin").value = minCard;
