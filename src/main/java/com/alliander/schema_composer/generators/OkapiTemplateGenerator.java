@@ -29,6 +29,6 @@ public class OkapiTemplateGenerator {
     }
 
     public String generate() {
-        return "OKAPI output here";
+        return "{ }";
     }
 }

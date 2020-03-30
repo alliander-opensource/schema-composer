@@ -2,6 +2,7 @@ package com.alliander.schema_composer;
 
 import com.alliander.schema_composer.generators.AvroGenerator;
 import com.alliander.schema_composer.generators.JsonSchemaGenerator;
+import com.alliander.schema_composer.generators.OkapiTemplateGenerator;
 import io.javalin.http.Handler;
 import com.alliander.schema_composer.loaders.EnterpriseArchitectLoader;
 import com.alliander.schema_composer.loaders.OntologyLoader;
@@ -20,6 +21,11 @@ public class SchemaComposerController {
 
     public static Handler convertToJSONSchema = ctx -> {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(new JSONObject(ctx.body()));
+        ctx.result(generator.generate());
+    };
+
+    public static Handler convertToOkapiTemplate = ctx -> {
+        OkapiTemplateGenerator generator = new OkapiTemplateGenerator(new JSONObject(ctx.body()));
         ctx.result(generator.generate());
     };
 
