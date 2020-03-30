@@ -1,6 +1,7 @@
 package com.alliander.schema_composer;
 
 import com.alliander.schema_composer.generators.AvroGenerator;
+import com.alliander.schema_composer.generators.OkapiTemplateGenerator;
 import org.apache.commons.cli.*;
 import io.javalin.Javalin;
 import java.io.IOException;
@@ -18,8 +19,14 @@ public class Main {
                 .argName("path/filename")
                 .desc("Generate an .avdl from a logical model")
                 .build();
+        Option okapi = Option.builder("okapi")
+                .hasArg()
+                .argName("path/filename")
+                .desc("Generate a template for okapi mappings from a logical model")
+                .build();
         options.addOption(avsc);
         options.addOption(avdl);
+        options.addOption(okapi);
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         try {
@@ -39,6 +46,14 @@ public class Main {
                 } catch (IOException e) {
                     System.out.println("Error while generating .avdl, please check if <" + cmd.getOptionValue("avdl")
                             + "> refers to a valid logical model");
+                }
+            } else if (cmd.hasOption("okapi")) {
+                try {
+                    OkapiTemplateGenerator generator = new OkapiTemplateGenerator(cmd.getOptionValue("okapi"));
+                    System.out.println(generator.generate());
+                } catch (IOException e) {
+                    System.out.println("Error while generating okapi mapping template, please check if <"
+                            + cmd.getOptionValue("okapi") + "> refers to a valid logical model");
                 }
             } else {
                 Javalin app = Javalin.create(config -> {
