@@ -6,6 +6,7 @@ import org.apache.avro.SchemaBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class AvroGenerator {
 
+    private final int generatorVersion = 1;
     private JSONObject data;
     private String rootClassIRI;
     private String namespace;
@@ -30,6 +32,8 @@ public class AvroGenerator {
     private JSONObject enums;
     private List<String> types;
     private PicoWriter writer;
+    private int modelVersion;
+    private String name;
 
     /**
      * Instantiates an AvroGenerator using a SchemaComposerModel schema
@@ -37,7 +41,19 @@ public class AvroGenerator {
      */
     public AvroGenerator(JSONObject data) {
         this.data = data;
-        this.rootClassIRI = this.data.get("root").toString();
+        if (this.data.has("root"))
+            this.rootClassIRI = this.data.get("root").toString();
+        else
+            this.rootClassIRI = this.data.getJSONObject("schemaGeneration")
+                    .getJSONObject("avro").get("aggregateRoot").toString();
+        if (this.data.has("version"))
+            this.modelVersion = (int) this.data.get("version");
+        else
+            this.modelVersion = 1;
+        if (this.data.has("name"))
+            this.name = this.data.get("name").toString();
+        else
+            this.name = this.rootClassIRI;
         this.namespace = this.data.get("namespace").toString();
         this.dataProperties = this.data.getJSONObject("axioms").getJSONArray("dataProperties");
         this.objectProperties = this.data.getJSONObject("axioms").getJSONArray("objectProperties");
@@ -56,6 +72,22 @@ public class AvroGenerator {
 
     public AvroGenerator(String filePath) throws IOException {
         this(new JSONObject(new String(Files.readAllBytes(Paths.get(filePath)))));
+    }
+
+    public String getPath() {
+        String path = String.join("\\", this.namespace.split("\\.")) + "\\";
+        // append the logical model name, version and the generator version to the path
+        return path + this.name.toLowerCase() + "\\" + this.modelVersion + "." + this.generatorVersion + "\\";
+    }
+
+    public void writeToFile(String path, boolean avdl) throws IOException {
+        String format = ".avsc";
+        if (avdl) format = ".avdl";
+        String file = path + this.name + format;
+        FileWriter writer = new FileWriter(file);
+        writer.write(this.generate(avdl));
+        writer.close();
+        System.out.println("Successfully generated: " + file);
     }
 
     /**
