@@ -14,4 +14,7 @@ The ESM schema composer uses the Enterprise architect database to retrieve UML c
 #### Manual OWL import 
 The tool allows to import OWL files.
 
+## Architecture overview
+[![Architecture overview](./Architecture-of-hte-schema-composer.png "Architecture")]
+
 # Status: Prototype
