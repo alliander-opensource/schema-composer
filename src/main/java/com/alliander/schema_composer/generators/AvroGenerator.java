@@ -75,9 +75,9 @@ public class AvroGenerator {
     }
 
     public String getPath() {
-        String path = String.join("\\", this.namespace.split("\\.")) + "\\";
+        String path = String.join("/", this.namespace.split("\\.")) + "/";
         // append the logical model name, version and the generator version to the path
-        return path + this.name.toLowerCase() + "\\" + this.modelVersion + "." + this.generatorVersion + "\\";
+        return path + this.name.toLowerCase() + "/" + this.modelVersion + "." + this.generatorVersion + "/";
     }
 
     public void writeToFile(String path, boolean avdl) throws IOException {
