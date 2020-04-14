@@ -56,10 +56,14 @@ public class JsonSchemaGenerator {
         if (this.rootClasses.length() == 0)
             this.rootClasses = this.classes;
 
-        // iterate over the rootclasses and collect the definition objects
+        // iterate over classes
+        this.classes.forEach(cls -> {
+            generateDefinition(cls.toString()); 
+        });
+
+        // iterate over the rootclasses
         for (int x = 0; x < this.rootClasses.length(); x++) {
             rootClassRefs.put(new JSONObject().put("$ref", "#/$defs/" + this.rootClasses.get(x)));
-            generateDefinition(this.rootClasses.get(x).toString());
         }
         rootClasses.put("anyOf", rootClassRefs);
 
