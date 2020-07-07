@@ -5,7 +5,7 @@ The goal of the tool is to generate/build profiles and related artifact based on
 ## General working of the tool
 The tools allows to select OWL or UML class concepts, set some additonal contrains (e.g. select a root class) and export them to an Avro or JSON schema.
 
-### Coneptual model import options
+### Conceptual model import options
 The ESM schema composer supports 2 ways of imports
 
 #### Enterprise architect pro-cloud server API
