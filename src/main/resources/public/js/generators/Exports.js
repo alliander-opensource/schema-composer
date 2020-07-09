@@ -34,3 +34,24 @@ function exportDiagram() {
     a.download = 'diagram.json';
     a.click();
 }
+
+function exportProfile() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/GenerateProfile", true);
+    var schema = {
+        "axioms" : {
+            "classes" : schemaDefinedClasses,
+            "dataProperties" : schemaDefinedDataProperties,
+            "objectProperties" : schemaDefinedObjectProperties,
+            "enums" : schemaDefinedEnums,
+            "inheritance" : schemaDefinedInheritance
+        }
+    }
+    xhttp.send(JSON.stringify(schema));
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            //var jsonResponse = JSON.parse(this.responseText);
+            console.log(this.responseText);
+        }
+    }
+}

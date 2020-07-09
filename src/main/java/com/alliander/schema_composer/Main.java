@@ -87,6 +87,7 @@ public class Main {
                 app.post("/ConvertToAvro", SchemaComposerController.convertToAVro);
                 app.post("/ConvertToJsonSchema", SchemaComposerController.convertToJSONSchema);
                 app.post("/ConvertToOkapiTemplate", SchemaComposerController.convertToOkapiTemplate);
+                app.post("/GenerateProfile", SchemaComposerController.generateProfile);
                 app.post("/GetDiagrams/:pk_guid/:uid", SchemaComposerController.getDiagrams);
                 app.post("/GetDiagram/:dg_guid/:uid", SchemaComposerController.getDiagram);
                 app.post("/GetUserIdentifier", SchemaComposerController.getUserIdentifier);

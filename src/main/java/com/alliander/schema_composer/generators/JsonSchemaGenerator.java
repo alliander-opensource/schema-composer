@@ -9,6 +9,8 @@ import java.util.List;
 
 public class JsonSchemaGenerator {
 
+    final boolean addTypes = true;
+
     private JSONObject data;
     private JSONArray rootClasses;
     private String namespace;
@@ -140,6 +142,14 @@ public class JsonSchemaGenerator {
                     }
                 }
             }
+            // optional hacky solution for object type identification
+            if (addTypes) {
+                JSONObject typeEnum = new JSONObject();
+                typeEnum.put("type", "string");
+                typeEnum.put("enum", new JSONArray().put(clsName));
+                properties.put("@type", typeEnum);
+            }
+
             this.definitions.put(clsName, definition);
             if (required.length() > 0)
                 definition.put("required", required);
