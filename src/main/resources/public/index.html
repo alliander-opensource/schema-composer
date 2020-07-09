@@ -104,6 +104,12 @@
         <h3>Laad een ontologie</h3>
         <label for="IRI">Ontology IRI</label>
         <input type="text" value="" id="IRI" /><input type="submit" value="Load" onclick="loadOntology()"/>
+        <h3>Voeg een class toe</h3>
+        <div id="ClassListWrapper">
+            <label for="ClassInput">Class IRI</label>
+            <input type="text" id="ClassInput"/><input type="submit" value="Add" onclick="addClass()"/>
+            <ul id="ClassList"></ul>
+        </div>
         <h3>Laad een diagram</h3>
         <label for="baseURI">BaseURI</label>
         <input type="text" id="baseURI"/>
@@ -116,12 +122,6 @@
         <input type="text" value="" id="dgGuid" />
         <label for="uid">User Identifier</label>
         <input type="text" value="" id="uid" /><input type="submit" value="Load" onclick="loadEADiagram()"/>
-        <h3>Voeg een class toe</h3>
-        <div id="ClassListWrapper">
-            <label for="ClassInput">Class IRI</label>
-            <input type="text" id="ClassInput"/><input type="submit" value="Add" onclick="addClass()"/>
-            <ul id="ClassList"></ul>
-        </div>
         <h3>Genereer AVRO schema</h3>
         <div id="RootClassWrapper">
             <label for="RootClass">RootClass IRI</label>

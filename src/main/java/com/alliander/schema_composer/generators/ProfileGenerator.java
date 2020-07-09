@@ -5,8 +5,10 @@ import org.json.JSONObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.*;
+import uk.ac.manchester.cs.owl.owlapi.OWLSubClassOfAxiomImpl;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 
 public class ProfileGenerator {
     private JSONObject data;
@@ -15,7 +17,7 @@ public class ProfileGenerator {
     private JSONArray inheritance;
     private JSONArray classes;
     private JSONObject enums;
-    OWLOntology ontology;
+    private HashMap<String, OWLClass> classList;
     OWLOntologyManager manager;
 
     public ProfileGenerator(JSONObject data) {
@@ -27,6 +29,7 @@ public class ProfileGenerator {
         this.enums = this.data.getJSONObject("axioms").getJSONObject("enums");
         this.dataProperties = this.data.getJSONObject("axioms").getJSONArray("dataProperties");
         this.objectProperties = this.data.getJSONObject("axioms").getJSONArray("objectProperties");
+        this.classList = new HashMap<String, OWLClass>();
         this.manager = OWLManager.createOWLOntologyManager();
     }
 
@@ -35,23 +38,101 @@ public class ProfileGenerator {
     }
 
     public String generate() throws OWLOntologyCreationException, OWLOntologyStorageException {
-        // setup 501 prof header
-        this.ontology = this.manager.createOntology();
-        this.addOntologyAnnotation("http://www.w3.org/ns/dcat#theme", "profile");
-        this.addOntologyAnnotation("http://purl.org/dc/terms/conformsTo", "urn:iso:std:iec:61970-501:draft:ed-2");
-        this.addOntologyAnnotation("http://purl.org/dc/terms/language", "en-GB");
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        this.manager.saveOntology(this.ontology, new RDFXMLDocumentFormat(), stream);
+        JSONObject response = new JSONObject();
+        response.put("profile", generateProfile());
+        response.put("vocabulary", generateVocabulary());
+        return response.toString();
+    }
 
-        OWLNamedIndividual vocab = this.getFactory().getOWLNamedIndividual("http://w3id.org/netbeheer/profilevocab");
-        OWLClassAssertionAxiom assertion = this.getFactory().getOWLClassAssertionAxiom(this.getFactory().getOWLClass("test"), vocab);
-        this.ontology.add(assertion);
-        System.out.println(stream.toString());
+    private String generateVocabulary() throws OWLOntologyCreationException, OWLOntologyStorageException {
+        OWLOntology ontology = this.manager.createOntology();
+        this.addOntologyAnnotation(ontology, "http://purl.org/dc/terms/conformsTo", "urn:iso:std:iec:61970-501:draft:ed-2");
+        this.addOntologyAnnotation(ontology, "http://www.w3.org/ns/dcat#theme", "vocabulary");
+        this.addOntologyAnnotation(ontology,"http://purl.org/dc/terms/language", "en-GB");
+
+        // classes
+        this.classes.forEach(clsName -> {
+           OWLClass cls = this.getFactory().getOWLClass(this.cleanIri(clsName.toString()));
+           this.classList.put(this.cleanIri(clsName.toString()), cls);
+           OWLDeclarationAxiom decl = this.getFactory().getOWLDeclarationAxiom(cls);
+           ontology.add(decl);
+        });
+
+        // object properties
+        this.objectProperties.forEach(prop -> {
+            JSONObject propData = (JSONObject) prop;
+            OWLObjectProperty oProp = this.getFactory().getOWLObjectProperty(this.cleanIri(propData.getString("property")));
+            OWLDeclarationAxiom decl = this.getFactory().getOWLDeclarationAxiom(oProp);
+            ontology.add(decl);
+        });
+
+        // data properties
+        this.dataProperties.forEach(prop -> {
+            JSONObject propData = (JSONObject) prop;
+            OWLDataProperty dProp = this.getFactory().getOWLDataProperty(this.cleanIri(propData.getString("property")));
+            OWLDeclarationAxiom decl = this.getFactory().getOWLDeclarationAxiom(dProp);
+            ontology.add(decl);
+        });
+
+        this.inheritance.forEach(in -> {
+            JSONObject inheritance = (JSONObject) in;
+            OWLSubClassOfAxiom subClass = this.getFactory().getOWLSubClassOfAxiom(this.classList.get(this.cleanIri(inheritance.getString("subClass"))), this.classList.get(this.cleanIri(inheritance.getString("superClass"))));
+            ontology.add(subClass);
+        });
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        RDFXMLDocumentFormat format = new RDFXMLDocumentFormat();
+        format.setPrefix("dct", "http://purl.org/dc/terms/");
+        this.manager.saveOntology(ontology, format, stream);
         return stream.toString();
     }
 
-    private void addOntologyAnnotation(String prop, String value) {
+    private String generateProfile() throws OWLOntologyCreationException, OWLOntologyStorageException {
+        OWLOntology ontology = this.manager.createOntology();
+        this.addOntologyAnnotation(ontology, "http://www.w3.org/ns/dcat#theme", "profile");
+        this.addOntologyAnnotation(ontology, "http://purl.org/dc/terms/conformsTo", "urn:iso:std:iec:61970-501:draft:ed-2");
+        this.addOntologyAnnotation(ontology,"http://purl.org/dc/terms/language", "en-GB");
+
+        OWLNamedIndividual vocab = this.getFactory().getOWLNamedIndividual("http://w3id.org/netbeheer/profile#vocab");
+        OWLDeclarationAxiom declaration = this.getFactory().getOWLDeclarationAxiom(vocab);
+        ontology.add(declaration);
+
+        OWLClass resourceDescriptor = this.getFactory().getOWLClass("http://www.w3.org/ns/dx/prof/ResourceDescriptor");
+        OWLClassAssertionAxiom classAssertion = this.getFactory().getOWLClassAssertionAxiom(resourceDescriptor, vocab);
+        ontology.add(classAssertion);
+
+        OWLObjectProperty prop = this.getFactory().getOWLObjectProperty("http://www.w3.org/ns/dx/prof/hasRole");
+        OWLNamedIndividual vocabRole = this.getFactory().getOWLNamedIndividual("http://www.w3.org/ns/dx/prof/role/vocabulary");
+        OWLObjectPropertyAssertionAxiom assertion = this.getFactory().getOWLObjectPropertyAssertionAxiom(prop, vocab, vocabRole);
+        ontology.add(assertion);
+
+        OWLObjectPropertyAssertionAxiom formatAssertion = this.getFactory().getOWLObjectPropertyAssertionAxiom(this.getFactory().getOWLObjectProperty("http://purl.org/dc/terms/format"), vocab, this.getFactory().getOWLNamedIndividual("https://www.iana.org/assignments/media-types/application/rdf+xml"));
+        ontology.add(formatAssertion);
+
+        OWLObjectPropertyAssertionAxiom resourceAssertion = this.getFactory().getOWLObjectPropertyAssertionAxiom(this.getFactory().getOWLObjectProperty("http://www.w3.org/ns/dx/prof/hasArtifact"), vocab, this.getFactory().getOWLNamedIndividual("http://w3id.org/netbeheer/profilevocab"));
+        ontology.add(resourceAssertion);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        RDFXMLDocumentFormat format = new RDFXMLDocumentFormat();
+        format.setPrefix("dct", "http://purl.org/dc/terms/");
+        this.manager.saveOntology(ontology, format, stream);
+        return stream.toString();
+    }
+
+    private void addOntologyAnnotation(OWLOntology ontology, String prop, String value) {
         OWLAnnotation annotation = this.getFactory().getOWLAnnotation(this.getFactory().getOWLAnnotationProperty(prop), this.getFactory().getOWLLiteral(value));
-        this.manager.applyChange(new AddOntologyAnnotation(this.ontology, annotation));
+        this.manager.applyChange(new AddOntologyAnnotation(ontology, annotation));
+    }
+
+    private String cleanIri(String iri) {
+        // quick hacky solution TODO fix
+        String newIri = iri;
+        if (iri.startsWith("<"))
+            newIri = newIri.substring(1);
+        if (iri.endsWith(">"))
+            newIri = newIri.substring(0, newIri.length()-1);
+        if (!iri.contains("http"))
+            newIri = "http://w3id.org/netbeheer/vocabulary#" + iri;
+        return newIri;
     }
 }

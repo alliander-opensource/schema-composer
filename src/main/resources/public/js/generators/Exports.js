@@ -50,8 +50,15 @@ function exportProfile() {
     xhttp.send(JSON.stringify(schema));
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            //var jsonResponse = JSON.parse(this.responseText);
-            console.log(this.responseText);
+            var jsonResponse = JSON.parse(this.responseText);
+            var a = document.createElement('a');
+            a.href = 'data:rdf/xml;charset=utf-8,'+encodeURIComponent(decodeURIComponent(jsonResponse["profile"]));
+            a.download = 'profile.rdf';
+            a.click();
+
+            a.href = 'data:rdf/xml;charset=utf-8,'+encodeURIComponent(decodeURIComponent(jsonResponse["vocabulary"]));
+            a.download = 'vocabulary.rdf';
+            a.click();
         }
     }
 }

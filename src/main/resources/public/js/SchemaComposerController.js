@@ -7,8 +7,8 @@ function addClass() {
         split = document.getElementById("ClassInput").value.split("/");
     }
     var iri = split[split.length-1].split(">")[0];
-    if (addClassInternal(iri)) {
-        addClassToCanvas(iri, [], iri);
+    if (addClassInternal(document.getElementById("ClassInput").value)) {
+        addClassToCanvas(iri, [], document.getElementById("ClassInput").value);
     }
     document.getElementById("ClassInput").value = "";
 }
