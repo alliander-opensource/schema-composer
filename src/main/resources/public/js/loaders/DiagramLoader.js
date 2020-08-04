@@ -5,6 +5,8 @@ function loadDiagram() {
     var reader = new FileReader();
     reader.onload = function(e) {
         var data = JSON.parse(reader.result);
+        schemaVersion = data["version"];
+        schemaGeneration = data["schemaGeneration"];
         var dataProperties = data["axioms"]["dataProperties"];
         var objectProperties = data["axioms"]["objectProperties"];
         var inheritance = data["axioms"]["inheritance"];

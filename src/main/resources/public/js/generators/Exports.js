@@ -19,6 +19,8 @@ function exportDiagram() {
         positions[key] = { "left": obj.left, "top": obj.top};
     }
     var diagram = {
+        "version" : schemaVersion,
+        "schemaGeneration" : schemaGeneration,
         "axioms" : {
             "classes" : schemaDefinedClasses,
             "dataProperties" : schemaDefinedDataProperties,
@@ -30,7 +32,7 @@ function exportDiagram() {
         "positions" : positions
     };
     var a = document.createElement('a');
-    a.href = 'data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(diagram));
+    a.href = 'data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(diagram, undefined, 4));
     a.download = 'diagram.json';
     a.click();
 }

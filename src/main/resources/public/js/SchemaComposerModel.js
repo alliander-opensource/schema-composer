@@ -11,6 +11,9 @@ var schemaDefinedEnums = {};
 // annotation properties
 var schemaDefinedAnnotations = [];
 
+var schemaVersion = "1.0.0";
+var schemaGeneration = {};
+
 // mapping { guid : name }
 var nameMapping = {}
 
