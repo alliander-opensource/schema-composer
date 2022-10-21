@@ -46,7 +46,7 @@ doesn't comply with the license.)
 Apache 2.0 header:
 
 ```
-    SPDX-FileCopyrightText: 2022 Contributors to the <YOUR PROJECT NAME> project <YOUR_PROJECT_EMAIL_ADRESS@alliander.com>
+    SPDX-FileCopyrightText: 2022 Contributors to the schema-composer project
     SPDX-License-Identifier: Apache-2.0
 ```
 
