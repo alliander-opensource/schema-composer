@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 'Copyright Contributors to the schema-composer project' 
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 # SchemaComposer
 The goal of the tool is to generate/build profiles and related artifact based on UML models and OWL ontologies. SchemaComposer allows users to create logical models visually, using concepts from conceptual models defined in both the Web Ontology Language (OWL) and the Unified Modeling Language (UML). Using these logical models, schemas in various schema definition languages can be generated automatically. Currently supports the generation of Avro Schema and JSON Schema. Idea's for other formats include: Odata, OAS, CIM-RDF, XSD, GraphQL etc.
