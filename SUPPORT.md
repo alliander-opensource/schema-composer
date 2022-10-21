@@ -1,19 +1,19 @@
 <!--
-SPDX-FileCopyrightText: 'Copyright Contributors to the [name_open_source_project] project' 
+SPDX-FileCopyrightText: 'Copyright Contributors to the schema-composer project' 
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
 # Getting Help
 
-There are a few ways to connect with the `<YOUR_PROJECT_NAME>` project:
+There are a few ways to connect with the `schema-composer` project:
 
 * Submit an issue
 * Send an email to the Technical Steering Committee: <YOUR_PROJECT_EMAIL_ADRESS@alliander.com>.
 
 ## How to ask for help, suggest a feature, or give recommendations.
 
-If you have trouble installing, building, or using the <YOUR_PROJECT_NAME>, 
+If you have trouble installing, building, or using the schema-composer, 
 but there's not yet reason to suspect you've encountered a genuine bug,
 you can ask a question in the issues tab of the repository.
 
