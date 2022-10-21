@@ -28,7 +28,7 @@ The various issue templates will guide you on making an effective report.
 ## How to report a security vulnerability
 
 If you think you've found a potential vulnerability in this project, please
-email <YOUR_PROJECT_EMAIL_ADRESS@alliander.com> to responsibly disclose it.
+email <OSPO@alliander.com> to responsibly disclose it.
 
 ## Contributing a fix
 
