@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 'Copyright Contributors to the [name_open_source_project] project' 
+SPDX-FileCopyrightText: 'Copyright Contributors to the schema-composer project' 
 
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -17,14 +17,11 @@ The Technical Steering Committee (TSC) is responsible for:
 1. Raise subjects/issues that are important for the direction/development of this project
 
 The community council consists of the following members:
-1. Product Owner - Team X
-1. Product Owner - Team Y
-1. Solution Architect - Team X
-1. Solution Architect - Team Y
-1. Lead Developer - Team X
-1. Lead Developer - Team Y
+1. Joep van Genuchten
+2. Anna Elgersma
+3. Ruben Haasjes
 
-Product Owner - Team X will chair the TSC.
+Joep van Genuchten will chair the TSC.
 
 ## Maintainers
 
@@ -38,10 +35,10 @@ Maintainers are responsible for maintaining parts of the code-base. Maintainers 
 1. In case of long discussions or arguments, maintainers or other can request a community council decision.
 
 The current maintainers of this project are:
- 1. Developer 1 - Team X
- 1. Developer 2 - Team X
- 1. Developer 3 - Team Y
- 1. Developer 4 - Team Y
+ 1. Joep van Genuchten
+ 1. Anna Elgersma
+ 1. Ruben Haasjes
+ 
 
  ## Contributors
 
