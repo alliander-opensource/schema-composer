@@ -18,3 +18,19 @@ The tool allows to import OWL files.
 [![Architecture overview](./Architecture-of-hte-schema-composer.png "Architecture")]
 
 # Status: Prototype
+
+# License
+This project is licensed under the Apache 2.0 - see [LICENSE](LICENSE) for details.
+
+# Licenses third-party libraries
+This project includes third-party libraries, 
+which are licensed under their own respective Open-Source licenses.
+SPDX-License-Identifier headers are used to show which license is applicable. 
+The concerning license files can be found in the [LICENSES](LICENSES) directory.
+
+# Contributing
+Please read [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) and [CONTRIBUTING](CONTRIBUTING.md) for details on the process 
+for submitting pull requests to us.
+
+# Contact
+Please read [SUPPORT](SUPPORT.md) for how to connect and get into contact with the Power Gird Model project.
